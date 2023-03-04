@@ -4,7 +4,7 @@ Original script by [hhfw1](https://github.com/hhfw1/hh_aidoc)
 
 Drop into resources and start.
 
-# Additions
+# Additions (QBcore Only)
 
 * Peds changed from a doctor to paramedic
 * Peds now run to and from your location
