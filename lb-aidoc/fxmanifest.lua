@@ -2,10 +2,7 @@ fx_version 'adamant'
 
 game 'gta5'
 
-description 'HHFW AI Doc [QB]'
-
-version '0.1.0'
-
+authors 'GLDNRMZ#8700 / HHFW'
 
 client_scripts {
     'client.lua'
