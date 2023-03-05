@@ -78,27 +78,40 @@ end
 
 Citizen.CreateThread(function()
     while true do
-      Citizen.Wait(200)
+        Citizen.Wait(200)
         if Active then
-            local loc = GetEntityCoords(GetPlayerPed(-1))
-			local lc = GetEntityCoords(veh)
-			local ld = GetEntityCoords(ped1)
-            local dist = Vdist(loc.x, loc.y, loc.z, lc.x, lc.y, lc.z)
-			local dist1 = Vdist(loc.x, loc.y, loc.z, ld.x, ld.y, ld.z)
+            local playerPed = GetPlayerPed(-1)
+            local loc = GetEntityCoords(playerPed)
+            local lc = GetEntityCoords(veh)
+            local ld = GetEntityCoords(ped1)
+            local dist = Vdist(loc, lc)
+            local dist1 = Vdist(loc, ld)
             if dist <= 10 then
-				if Active then
+                if Active then
 					TaskGoToCoordAnyMeans(ped1, loc.x, loc.y, loc.z, 3.0, 0, 0, 786603, 0xbf800000)
 				end
-				if dist1 <= 1 then 
-					Active = false
-					ClearPedTasksImmediately(ped1)
-					SetEntityCoords(GetPlayerPed(-1), ld.x + 1.0, ld.y + 1.0, ld.z, 0, 0, 0, 1)
-					DoctorNPC()
-				end
+                if dist1 <= 1.66 then 
+                    Active = false
+                    ClearPedTasksImmediately(ped1)
+                    if IsPedInAnyVehicle(playerPed, false) then
+                        local veh = GetVehiclePedIsIn(playerPed, false)
+                        SetEntityCoords(playerPed, ld.x + 1.0, ld.y + 1.0, ld.z, 0, 0, 0, 1) -- Teleport the player outside the vehicle to the NPC's location
+                        DoctorNPC()
+                    else
+                        DoctorNPC()
+                    end
+                elseif IsPedInAnyVehicle(playerPed, false) and dist <= 1.66 then
+                    local veh = GetVehiclePedIsIn(playerPed, false)
+                    if GetPedInVehicleSeat(veh, -1) == playerPed then
+                        SetEntityCoords(playerPed, ld.x + 1.0, ld.y + 1.0, ld.z, 0, 0, 0, 1) -- Teleport the player outside the vehicle to the NPC's location
+                        DoctorNPC()
+                    end
+                end
             end
         end
     end
 end)
+
 
 local ANIM_DICT = "mini@cpr@char_a@cpr_str"
 local REVIVE_TIME = Config.ReviveTime
