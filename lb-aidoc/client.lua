@@ -92,6 +92,7 @@ Citizen.CreateThread(function()
 				if dist1 <= 1 then 
 					Active = false
 					ClearPedTasksImmediately(ped1)
+					SetEntityCoords(GetPlayerPed(-1), ld.x + 1.0, ld.y + 1.0, ld.z, 0, 0, 0, 1)
 					DoctorNPC()
 				end
             end
