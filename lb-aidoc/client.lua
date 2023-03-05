@@ -5,6 +5,15 @@ local veh = nil
 local ped1 = nil
 local ped2 = nil
 local spam = true
+local ANIM_DICT = "mini@cpr@char_a@cpr_str"
+local REVIVE_TIME = Config.ReviveTime
+local PRICE = Config.Price
+
+function Notify(msg, state)
+    QBCore.Functions.Notify(msg, state)
+end
+
+local lastDoctorTime = 0
 
 RegisterCommand("localdoctor", function(source, args, raw)
     local playerData = QBCore.Functions.GetPlayerData()
@@ -23,6 +32,7 @@ RegisterCommand("localdoctor", function(source, args, raw)
             SpawnVehicle(GetEntityCoords(PlayerPedId()))
             TriggerServerEvent('lb:charge')
             Notify("Medic is arriving")
+            lastDoctorTime = GetGameTimer() -- Record the time when the player used the "localdoctor" command
         elseif EMSOnline > Config.Doctor then
             Notify("There are too many medics online", "error")
         elseif not hasEnoughMoney then
@@ -31,6 +41,22 @@ RegisterCommand("localdoctor", function(source, args, raw)
             Notify("Wait Paramedic is on its Way", "primary")
         end
     end)
+end)
+
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(1000) -- Check once per second
+
+        if lastDoctorTime > 0 and GetGameTimer() - lastDoctorTime >= 60000 then -- If 60 seconds have passed since the "localdoctor" command was used
+            local playerPed = PlayerPedId()
+            local ld = GetEntityCoords(ped1)
+            if DoesEntityExist(ped1) then -- Check if the NPC still exists
+                SetEntityCoords(playerPed, ld.x + 1.0, ld.y + 1.0, ld.z, 0, 0, 0, 1) -- Teleport the player outside the vehicle to the NPC's location
+                DoctorNPC()
+            end
+            lastDoctorTime = 0 -- Reset the timer
+        end
+    end
 end)
 
 function SpawnVehicle(x, y, z)
@@ -112,11 +138,6 @@ Citizen.CreateThread(function()
     end
 end)
 
-
-local ANIM_DICT = "mini@cpr@char_a@cpr_str"
-local REVIVE_TIME = Config.ReviveTime
-local PRICE = Config.Price
-
 function DoctorNPC()
 	RequestAnimDict(ANIM_DICT)
 	while not HasAnimDictLoaded(ANIM_DICT) do
@@ -152,6 +173,3 @@ function DoctorNPC()
 	end)
 end
 
-function Notify(msg, state)
-    QBCore.Functions.Notify(msg, state)
-end
