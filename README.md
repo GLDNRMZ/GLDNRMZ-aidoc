@@ -6,6 +6,7 @@ Drop into resources and start.
 
 # Additions
 
+* Teleports you to ped after 1 min of calling /localdoctor if ambulance is stuck or you're in a weird spot.
 * Now teleports you next to the ped if in a vehicle.
 * Peds changed from a doctor to paramedic
 * Peds now run to and from your location
