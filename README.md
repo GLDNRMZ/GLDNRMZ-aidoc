@@ -6,7 +6,7 @@ Drop into resources and start.
 
 # Additions
 
-* Now teleports you next to the ped. This allows you to be healed when dead in a car.
+* Now teleports you next to the ped if in a vehicle.
 * Peds changed from a doctor to paramedic
 * Peds now run to and from your location
 * Peds now gets back in the vehicle and drives away
