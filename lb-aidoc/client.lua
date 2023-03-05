@@ -32,7 +32,7 @@ RegisterCommand("localdoctor", function(source, args, raw)
             SpawnVehicle(GetEntityCoords(PlayerPedId()))
             TriggerServerEvent('lb:charge')
             Notify("Medic is arriving")
-            lastDoctorTime = GetGameTimer() -- Record the time when the player used the "localdoctor" command
+            lastDoctorTime = GetGameTimer()
         elseif EMSOnline > Config.Doctor then
             Notify("There are too many medics online", "error")
         elseif not hasEnoughMoney then
@@ -45,16 +45,16 @@ end)
 
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(1000) -- Check once per second
+        Citizen.Wait(1000)
 
-        if lastDoctorTime > 0 and GetGameTimer() - lastDoctorTime >= 60000 then -- If 60 seconds have passed since the "localdoctor" command was used
+        if lastDoctorTime > 0 and GetGameTimer() - lastDoctorTime >= 60000 then -- DO NOT LOWER UNLESS YOU LOWER LINE 168. This will TP to the vehicle as its driving away.
             local playerPed = PlayerPedId()
             local ld = GetEntityCoords(ped1)
-            if DoesEntityExist(ped1) then -- Check if the NPC still exists
-                SetEntityCoords(playerPed, ld.x + 1.0, ld.y + 1.0, ld.z, 0, 0, 0, 1) -- Teleport the player outside the vehicle to the NPC's location
+            if DoesEntityExist(ped1) then
+                SetEntityCoords(playerPed, ld.x + 1.0, ld.y + 1.0, ld.z, 0, 0, 0, 1)
                 DoctorNPC()
             end
-            lastDoctorTime = 0 -- Reset the timer
+            lastDoctorTime = 0
         end
     end
 end)
@@ -121,7 +121,7 @@ Citizen.CreateThread(function()
                     ClearPedTasksImmediately(ped1)
                     if IsPedInAnyVehicle(playerPed, false) then
                         local veh = GetVehiclePedIsIn(playerPed, false)
-                        SetEntityCoords(playerPed, ld.x + 1.0, ld.y + 1.0, ld.z, 0, 0, 0, 1) -- Teleport the player outside the vehicle to the NPC's location
+                        SetEntityCoords(playerPed, ld.x + 1.0, ld.y + 1.0, ld.z, 0, 0, 0, 1)
                         DoctorNPC()
                     else
                         DoctorNPC()
@@ -129,7 +129,7 @@ Citizen.CreateThread(function()
                 elseif IsPedInAnyVehicle(playerPed, false) and dist <= 1.66 then
                     local veh = GetVehiclePedIsIn(playerPed, false)
                     if GetPedInVehicleSeat(veh, -1) == playerPed then
-                        SetEntityCoords(playerPed, ld.x + 1.0, ld.y + 1.0, ld.z, 0, 0, 0, 1) -- Teleport the player outside the vehicle to the NPC's location
+                        SetEntityCoords(playerPed, ld.x + 1.0, ld.y + 1.0, ld.z, 0, 0, 0, 1)
                         DoctorNPC()
                     end
                 end
@@ -155,7 +155,7 @@ function DoctorNPC()
 		disableCarMovement = false,
 		disableMouse = false,
 		disableCombat = true,
-	}, {}, {}, {}, function() -- Done
+	}, {}, {}, {}, function()
 		ClearPedTasks(ped1)
 		Citizen.Wait(500)
 		TriggerEvent("hospital:client:Revive")
@@ -172,4 +172,3 @@ function DoctorNPC()
 		spam = true
 	end)
 end
-
