@@ -8,6 +8,7 @@ local spam = true
 local ANIM_DICT = "mini@cpr@char_a@cpr_str"
 local REVIVE_TIME = Config.ReviveTime
 local PRICE = Config.Price
+local teleportDelay = 600000 -- 60 sec
 
 function Notify(msg, state)
     QBCore.Functions.Notify(msg, state)
@@ -47,14 +48,19 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(1000)
 
-        if lastDoctorTime > 0 and GetGameTimer() - lastDoctorTime >= 60000 then -- DO NOT LOWER UNLESS YOU LOWER LINE 168. This will TP to the vehicle as its driving away.
+        if lastDoctorTime > 0 and GetGameTimer() - lastDoctorTime >= teleportDelay then
             local playerPed = PlayerPedId()
             local ld = GetEntityCoords(ped1)
             if DoesEntityExist(ped1) then
-                SetEntityCoords(playerPed, ld.x + 1.0, ld.y + 1.0, ld.z, 0, 0, 0, 1)
-                DoctorNPC()
+                if not isDoctorNPCCalled then
+                    SetEntityCoords(playerPed, ld.x + 1.0, ld.y + 1.0, ld.z, 0, 0, 0, 1)
+                    DoctorNPC()
+                    isDoctorNPCCalled = true
+                end
             end
             lastDoctorTime = 0
+        else
+            isDoctorNPCCalled = false
         end
     end
 end)
@@ -114,9 +120,9 @@ Citizen.CreateThread(function()
             local dist1 = Vdist(loc, ld)
             if dist <= 10 then
                 if Active then
-					TaskGoToCoordAnyMeans(ped1, loc.x, loc.y, loc.z, 3.0, 0, 0, 786603, 0xbf800000)
-				end
-                if dist1 <= 1.66 then 
+                    TaskGoToCoordAnyMeans(ped1, loc.x, loc.y, loc.z, 3.0, 0, 0, 786603, 0xbf800000)
+                end
+                if dist1 <= 1.33 then 
                     Active = false
                     ClearPedTasksImmediately(ped1)
                     if IsPedInAnyVehicle(playerPed, false) then
@@ -126,12 +132,7 @@ Citizen.CreateThread(function()
                     else
                         DoctorNPC()
                     end
-                elseif IsPedInAnyVehicle(playerPed, false) and dist <= 1.66 then
-                    local veh = GetVehiclePedIsIn(playerPed, false)
-                    if GetPedInVehicleSeat(veh, -1) == playerPed then
-                        SetEntityCoords(playerPed, ld.x + 1.0, ld.y + 1.0, ld.z, 0, 0, 0, 1)
-                        DoctorNPC()
-                    end
+                    
                 end
             end
         end
@@ -165,7 +166,7 @@ function DoctorNPC()
 		RemovePedElegantly(ped1)
 		TaskEnterVehicle(ped1, veh, 0, 2, 3.0, 1, 0)
 		TaskVehicleDriveWander(ped1, veh, 25.0, 524295)
-		Wait(20000)
+		Wait(15000)
 		DeleteEntity(veh)
 		DeleteEntity(ped1)
 		DeleteEntity(ped2)
