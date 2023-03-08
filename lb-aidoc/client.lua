@@ -43,22 +43,16 @@ RegisterCommand("localdoctor", function(source, args, raw)
     end)
 end)
 
-local doctorCalled = false
-
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(1000)
 
-        if lastDoctorTime > 0 and GetGameTimer() - lastDoctorTime >= 60000 then
-            if not doctorCalled then
-                local playerPed = PlayerPedId()
-                local ld = GetEntityCoords(ped1)
-                if DoesEntityExist(ped1) then
-                    SetEntityCoords(playerPed, ld.x + 1.0, ld.y + 1.0, ld.z, 0, 0, 0, 1)
-                    doctorCalled = true
-                    Wait(4000)
-                    DoctorNPC()
-                end
+        if lastDoctorTime > 0 and GetGameTimer() - lastDoctorTime >= 90000 then -- DO NOT LOWER UNLESS YOU LOWER LINE 168. This will TP to the vehicle as its driving away.
+            local playerPed = PlayerPedId()
+            local ld = GetEntityCoords(ped1)
+            if DoesEntityExist(ped1) then
+                SetEntityCoords(playerPed, ld.x + 1.0, ld.y + 1.0, ld.z, 0, 0, 0, 1)
+                DoctorNPC()
             end
             lastDoctorTime = 0
         end
