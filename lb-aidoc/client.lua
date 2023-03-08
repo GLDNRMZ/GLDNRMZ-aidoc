@@ -8,7 +8,6 @@ local spam = true
 local ANIM_DICT = "mini@cpr@char_a@cpr_str"
 local REVIVE_TIME = Config.ReviveTime
 local PRICE = Config.Price
-local teleportDelay = 600000 -- 60 sec
 
 function Notify(msg, state)
     QBCore.Functions.Notify(msg, state)
@@ -48,19 +47,14 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(1000)
 
-        if lastDoctorTime > 0 and GetGameTimer() - lastDoctorTime >= teleportDelay then
+        if lastDoctorTime > 0 and GetGameTimer() - lastDoctorTime >= 90000 then -- DO NOT LOWER UNLESS YOU LOWER LINE 168. This will TP to the vehicle as its driving away.
             local playerPed = PlayerPedId()
             local ld = GetEntityCoords(ped1)
             if DoesEntityExist(ped1) then
-                if not isDoctorNPCCalled then
-                    SetEntityCoords(playerPed, ld.x + 1.0, ld.y + 1.0, ld.z, 0, 0, 0, 1)
-                    DoctorNPC()
-                    isDoctorNPCCalled = true
-                end
+                SetEntityCoords(playerPed, ld.x + 1.0, ld.y + 1.0, ld.z, 0, 0, 0, 1)
+                DoctorNPC()
             end
             lastDoctorTime = 0
-        else
-            isDoctorNPCCalled = false
         end
     end
 end)
