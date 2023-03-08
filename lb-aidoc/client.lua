@@ -49,7 +49,7 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(1000)
 
-        if lastDoctorTime > 0 and GetGameTimer() - lastDoctorTime >= 10000 then
+        if lastDoctorTime > 0 and GetGameTimer() - lastDoctorTime >= 60000 then
             if not doctorCalled then
                 local playerPed = PlayerPedId()
                 local ld = GetEntityCoords(ped1)
@@ -166,7 +166,7 @@ function DoctorNPC()
 		RemovePedElegantly(ped1)
 		TaskEnterVehicle(ped1, veh, 0, 2, 3.0, 1, 0)
 		TaskVehicleDriveWander(ped1, veh, 25.0, 524295)
-		Wait(60000)
+		Wait(15000)
 		DeleteEntity(veh)
 		DeleteEntity(ped1)
 		DeleteEntity(ped2)
