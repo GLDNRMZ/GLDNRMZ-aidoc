@@ -15,11 +15,11 @@ QBCore.Functions.CreateCallback('lb:docOnline', function(source, cb)
 	end
 
 	for i=1, #xPlayers, 1 do
-		local xPlayer = QBCore.Functions.GetPlayer(xPlayers[i])
-		if xPlayer.PlayerData.job.name == 'ambulance' then
-			doctor = doctor + 1
-		end
-	end
+        local xPlayer = QBCore.Functions.GetPlayer(xPlayers[i])
+        if xPlayer.PlayerData.job.name == 'ambulance' and xPlayer.PlayerData.job.onduty then
+            doctor = doctor + 1
+        end
+    end
 
 	cb(doctor, canpay)
 end)
@@ -35,4 +35,3 @@ AddEventHandler('lb:charge', function()
 	end
 	TriggerEvent("qb-bossmenu:server:addAccountMoney", 'ambulance', Config.Price)
 end)
-
