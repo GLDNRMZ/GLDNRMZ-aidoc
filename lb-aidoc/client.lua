@@ -34,7 +34,7 @@ RegisterCommand("localdoctor", function(source, args, raw)
             Notify("Medic is arriving")
             lastDoctorTime = GetGameTimer()
         elseif EMSOnline > Config.Doctor then
-            Notify("There are too many medics online", "error")
+            Notify("There are too many medics on duty", "error")
         elseif not hasEnoughMoney then
             Notify("Not Enough Money", "error")
         else
@@ -47,13 +47,11 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(1000)
 
-        if lastDoctorTime > 0 and GetGameTimer() - lastDoctorTime >= 90000 then
+        if lastDoctorTime > 0 and GetGameTimer() - lastDoctorTime >= 60000 then
             local playerPed = PlayerPedId()
             local ld = GetEntityCoords(ped1)
             if DoesEntityExist(ped1) then
-                SetEntityCoords(playerPed, ld.x + 1.0, ld.y + 1.0, ld.z, 0, 0, 0, 1)
-                Wait(4000)
-                DoctorNPC()
+                SetEntityCoords(playerPed, ld.x + 5.0, ld.y + 5.0, ld.z, 0, 0, 0, 1)
             end
             lastDoctorTime = 0
         end
@@ -161,7 +159,7 @@ function DoctorNPC()
 		RemovePedElegantly(ped1)
 		TaskEnterVehicle(ped1, veh, 0, 2, 3.0, 1, 0)
 		TaskVehicleDriveWander(ped1, veh, 25.0, 524295)
-		Wait(15000)
+		Wait(20000)
 		DeleteEntity(veh)
 		DeleteEntity(ped1)
 		DeleteEntity(ped2)
