@@ -13,3 +13,4 @@ Drop into resources and start.
 * Peds now gets back in the vehicle and drives away
 * Peds now use ambient speech (driver curses and passenger insults you)
 * Vehicle turns on lights and sirens
+* Looks for medics on duty rather than online
