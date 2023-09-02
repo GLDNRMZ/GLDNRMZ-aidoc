@@ -29,9 +29,9 @@ AddEventHandler('lb:charge', function()
 	local src = source
 	local xPlayer = QBCore.Functions.GetPlayer(src)
 	if xPlayer.PlayerData.money["cash"] >= Config.Price then
-		xPlayer.Functions.RemoveMoney("cash", Config.Price)
+		xPlayer.Functions.RemoveMoney("cash", Config.Price, GetCurrentResourceName()..' - AI Doc Fees')
 	else
-		xPlayer.Functions.RemoveMoney("bank", Config.Price)
+		xPlayer.Functions.RemoveMoney("bank", Config.Price, GetCurrentResourceName()..' - AI Doc Fees')
 	end
-	TriggerEvent("qb-bossmenu:server:addAccountMoney", 'ambulance', Config.Price)
+	exports['qb-management']:AddMoney('ambulance', Config.Price)
 end)
