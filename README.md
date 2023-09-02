@@ -1,6 +1,8 @@
 # lb-aidoc
 
 Original QBcore versoin by [hhfw1](https://github.com/hhfw1/hh_aidoc)
+Teleport rework by: [Sanriku](https://github.com/Sanriku-Gaming)
+Jail Snippet by: amrclake
 
 Drop into resources and start.
 
