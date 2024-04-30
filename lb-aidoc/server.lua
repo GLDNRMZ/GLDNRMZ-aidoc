@@ -33,5 +33,5 @@ AddEventHandler('lb:charge', function()
 	else
 		xPlayer.Functions.RemoveMoney("bank", Config.Price, GetCurrentResourceName()..' - AI Doc Fees')
 	end
-	exports['qb-management']:AddMoney('ambulance', Config.Price)
+	exports['qb-banking']:AddMoney('ambulance', Config.Price)
 end)
